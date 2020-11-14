@@ -1,13 +1,13 @@
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, ActivityIndicator, Text, View, ScrollView, } from 'react-native';
+import { Dimensions,TouchableOpacity, Image, ActivityIndicator, Text, View, ScrollView, } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Dot from 'react-native-vector-icons/Entypo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Header, Avatar, Divider, Tooltip,Button, Badge, SearchBar, Overlay, Input } from 'react-native-elements';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import ViewMoreText from 'react-native-view-more-text';
+import { FlatList,  } from 'react-native-gesture-handler';
+
 import Icon from 'react-native-vector-icons/Feather';
 import En from 'react-native-vector-icons/Entypo';
 const UserHome = ({ navigation }) => {
@@ -24,9 +24,11 @@ const UserHome = ({ navigation }) => {
   const[no,setno]=useState()
   const[tname,settname]=useState()
   const[sports,setsports]=useState()
+  const[load,setload]=useState(false)
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   useEffect(() => {
+    setload(true)
     AsyncStorage.setItem('type', "user")
     AsyncStorage.getItem('User').then((value) => {
       const data = JSON.parse(value)
@@ -69,11 +71,15 @@ const UserHome = ({ navigation }) => {
               mainid: doc.data().id,
               one: doc.data().price1,
               two: doc.data().price2,
-              three: doc.data().price3
+              three: doc.data().price3,
+              dp:doc.data().udp,
+              uname:doc.data().uname
           });
         });
         setdata(list);
         setarr(list)
+        setload(false)
+        console.log(list)
 
       })
 
@@ -89,16 +95,7 @@ const UserHome = ({ navigation }) => {
     
   }
 
-  const renderViewMore = (onPress) => {
-    return (
-      <Text style={{ color: '#808080', marginTop: 5 }} onPress={onPress}>View more</Text>
-    )
-  }
-  const renderViewLess = (onPress) => {
-    return (
-      <Text style={{ color: '#808080', marginTop: 5 }} onPress={onPress}>View less</Text>
-    )
-  }
+ 
 
   const toggleOverlay = (mainid,id,tname,sports) => {  
     setorgid(mainid)
@@ -112,7 +109,7 @@ const UserHome = ({ navigation }) => {
   const Tapply =()=>{
     firestore()
     .collection('Apply')
-    .doc(uuid)
+    .doc(postid)
     .set({
       name: naam,
       phoneNumber:no,
@@ -133,13 +130,18 @@ const UserHome = ({ navigation }) => {
   }
   
 
+ 
+
 
   return (
     <>
        <Header containerStyle={{backgroundColor:'white'}}
      leftComponent={<Dot name='menu' size={25} color='black' onPress={()=>navigation.openDrawer()} />}
       centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>Tournaments</Text>}
-      rightComponent={<Icon name='search' size={25} color='black' style={{paddingEnd:10}} onPress={()=>navigation.navigate('SearchOrginzer')} />}
+      rightComponent={load?( <ActivityIndicator animating={load} size='large' color="#ff0000" />):
+      (<Icon name='search' size={25} color='black' style={{paddingEnd:10}} onPress={()=>navigation.navigate('SearchOrginzer')} /> )
+       }
+  
     />
     <Divider/>
      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
@@ -166,6 +168,7 @@ const UserHome = ({ navigation }) => {
 
         </View>
       </Overlay>
+      
       <SearchBar containerStyle={{ backgroundColor: 'white', borderBottomColor: 'white', borderTopColor: 'white' }} inputContainerStyle={{ backgroundColor: 'white' }}
         placeholder="Search Sports "
         onChangeText={(text) => searchData(text)} value={text}
@@ -176,57 +179,50 @@ const UserHome = ({ navigation }) => {
     data={data}
     renderItem={({item})=>
     <View>
-      
-    <View style={{marginTop:10 }}>
-    <Text style={{ fontSize: 15,paddingLeft:10,fontWeight:'bold', }}>{item.Tournament_Name}
-    <Badge  value={item.sports} status="error" containerStyle={{}} />
-    </Text>
-    <Text style={{ fontSize: 12,paddingLeft:10}}>{item.Location}</Text>
     
-    </View>
    
-  <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
-    <TouchableOpacity  onPress={()=>toggleOverlay(item.mainid,item.id,item.Tournament_Name,item.sports)}>
-  <Text style={{marginTop:22,paddingEnd:10,fontSize:15,}}>{item.one}₹ <Text style={{color:'#258ED7'}}>Apply</Text> </Text>
-  </TouchableOpacity>
+<View style={{ padding: 7 }}>
+  <Avatar size={50} activeOpacity={0.7} rounded source={{ uri: item.dp }} />
+</View>
+<View style={{ position: 'absolute', }}>
+  <Text style={{ fontSize: 15, marginTop: 10, paddingLeft: 70, fontWeight: 'bold' }}>{item.uname}
+  </Text>
+  <Text style={{ fontSize: 13, paddingLeft: 70, }}>{item.Location}</Text>
+</View>
+<View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
+  <Text style={{ marginTop: 5, paddingEnd: 10, fontSize: 15 }}>
+  ₹ {item.one}</Text>
+</View>
+<View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
+  <Text style={{ marginTop: 30, paddingEnd:55, fontSize: 15,}}>
+    {item.sports}</Text>
+</View>
+<View style={{position:'absolute',alignSelf:'flex-end',marginTop:20}}>
+<Button title="Apply"  type="clear" onPress={()=>toggleOverlay(item.mainid,item.id,item.Tournament_Name,item.sports)}
+   />
   </View>
-   
-    <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
-      <Text style={{ marginTop:7, paddingEnd:10, fontSize: 12 }}>
-        {item.Tournament_date}</Text>
-  
-    </View>
 
-    <View style={{ paddingLeft: 10 ,marginTop:10}}>
-                  <ViewMoreText
-                    numberOfLines={1}
-                    renderViewMore={renderViewMore}
-                    renderViewLess={renderViewLess}
-                    textStyle={{ color: 'black', fontSize: 15 }}
-                  >
-                    <Text>
-                      First Price {item.one}₹ ,Second Price {item.two}₹ Third Price {item.three}₹... 
-                      Entry Fees for {item.sports} Tournament {item.Tournament_Name} is {item.entry_fees}₹ . {" "}
-                      {item.description}
-                    </Text>
-                  </ViewMoreText>
+<Divider/>
+<View style={{ paddingLeft: 10,marginTop:10 }}>
+                
+                 <Text>
+                   The {item.Tournament_Name} will be held on {item.Tournament_date} Total Teams Played {item.teams} . Entry Fees will be Rupees ₹{item.entry_fees} and First Price ₹{item.one}  Second Price ₹{item.two}  Third Price ₹{item.three}...
+                  </Text>
+                  
+             </View>
+             
 
-                </View>
-                <Divider />
-    
-
+             <Divider  style={{marginTop:10}}/>
 
     <View style={{ margin: 5, }} >
       
-      <Image source={{ uri: item.img_url }} style={{width:"100%", height:300 }} PlaceholderContent={<ActivityIndicator />} />
+      <Image source={{ uri: item.img_url }} style={{marginTop:5,width:"100%", height:400 }} PlaceholderContent={<ActivityIndicator />} />
     </View><Text style={{alignSelf:'flex-end',fontSize:10,paddingEnd:10}}>{item.CreatedAt}</Text>
   
-
-   <Divider/>
-    
-  </View>
+ 
+    <Divider  style={{marginTop:10}}/>
   
-    
+  </View>
   
   }
   keyExtractor={(item) => item.id}

@@ -4,11 +4,12 @@ import { Text, View, Dimensions, ActivityIndicator, FlatList, Image, StyleSheet,
 import AsyncStorage from '@react-native-community/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ViewMoreText from 'react-native-view-more-text';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Card, Header, Avatar, Divider, Tooltip, Badge, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import Dot from 'react-native-vector-icons/Entypo';
+import auth from '@react-native-firebase/auth';
+
 
 const Home = ({ navigation }) => {
   const windowWidth = Dimensions.get('window').width;
@@ -17,7 +18,7 @@ const Home = ({ navigation }) => {
   const [Data, Setdata] = useState([])
   const [name, setname] = useState('')
   const [email, setemail] = useState('')
-  const[load,setload]=useState(true)
+  const[load,setload]=useState(false)
   const [dp, setdp] = useState('../assets/default.jpg')
   useEffect(() => {
     setload(true)
@@ -88,16 +89,6 @@ const Home = ({ navigation }) => {
   }, [])
 
 
-  const renderViewMore = (onPress) => {
-    return (
-      <Text style={{ color: '#808080', marginTop: 5 }} onPress={onPress}>View more</Text>
-    )
-  }
-  const renderViewLess = (onPress) => {
-    return (
-      <Text style={{ color: '#808080', marginTop: 5 }} onPress={onPress}>View less</Text>
-    )
-  }
   const singout = () => {
     auth()
       .signOut()
@@ -117,6 +108,8 @@ const Home = ({ navigation }) => {
          }
         />
       <Divider />
+
+
    
 {
   ! arr?(
@@ -132,45 +125,43 @@ const Home = ({ navigation }) => {
             renderItem={({ item }) =>
               <View>
 
-                <View style={{ padding: 10 }}>
-                  <Avatar size='small' activeOpacity={0.7} rounded source={{ uri: dp }} />
+                <View style={{ padding: 7 }}>
+                  <Avatar size={50} activeOpacity={0.7} rounded source={{ uri: dp }} />
                 </View>
                 <View style={{ position: 'absolute', }}>
-                  <Text style={{ fontSize: 15, marginTop: 10, paddingLeft: 55, fontWeight: 'bold' }}>{name}
-                  <Text>  <Badge  value={item.sports} status="error" containerStyle={{}} /></Text></Text>
-                  <Text style={{ fontSize: 13, paddingLeft: 55, }}>{item.Location}</Text>
+                  <Text style={{ fontSize: 15, marginTop: 10, paddingLeft: 70, fontWeight: 'bold' }}>{name}
+                  </Text>
+                  <Text style={{ fontSize: 13, paddingLeft: 70, }}>{item.Location}</Text>
                 </View>
                 <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
-                  <Text style={{ marginTop: 5, paddingEnd: 10, fontSize: 12 }}>
-                    {item.Tournament_date}</Text>
+                  <Text style={{ marginTop: 5, paddingEnd: 10, fontSize: 15 }}>
+                  ₹ {item.one}</Text>
                 </View>
+                <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
+                  <Text style={{ marginTop: 30, paddingEnd:10, fontSize: 15,}}>
+                    {item.sports}</Text>
+                </View>
+                <Divider/>
               
   
-                <View style={{ paddingLeft: 10 }}>
-                  <ViewMoreText
-                    numberOfLines={1}
-                    renderViewMore={renderViewMore}
-                    renderViewLess={renderViewLess}
-                    textStyle={{ color: 'black', fontSize: 15 }}
-                  >
+                <View style={{ paddingLeft: 10,marginTop:10 }}>
+                 
                     <Text>
-                      First Price {item.one}₹ ,Second Price {item.two}₹ Third Price {item.three}₹... 
-                      Entry Fees for {item.sports} Tournament {item.Tournament_Name} is {item.entry_fees}₹ . {" "}
-                      
+                      The {item.Tournament_Name} will be held on {item.Tournament_date} Total Teams Played {item.teams} . Entry Fees will be Rupees ₹{item.entry_fees} and First Price ₹{item.one}  Second Price ₹{item.two}  Third Price ₹{item.three}...
                     </Text>
-                  </ViewMoreText>
+                  
 
                 </View>
-                <Divider />
+                <Divider style={{marginTop:10}} />
 
 
                 <View style={{ margin: 5, }} >
-                  <Image source={{ uri: item.img_url }} style={{ width: "100%", height: 300 }}
+                  <Image source={{ uri: item.img_url }} style={{ width: "100%", height: 400 }}
                    PlaceholderContent={<ActivityIndicator  size='large' color="#ff0000" />} />
                 </View>
   <Text style={{alignSelf:'flex-end',fontSize:10,paddingEnd:10}}>{item.CreatedAt}</Text>
                 
-                <Divider />
+                <Divider style={{marginTop:10}} />
               </View>
             }
             keyExtractor={(item) => item.id}

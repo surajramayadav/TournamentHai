@@ -27,12 +27,13 @@ const UserActivity = ({ navigation }) => {
                             CreatedAt: doc.data().CreatedAt.toDate().toDateString(),
                         })
                         setdata(list)
+                        console.log(list)
 
                     });
 
                 })
         })
-        console.log(data)
+        
 
     }, [])
 

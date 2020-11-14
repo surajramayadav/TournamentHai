@@ -19,6 +19,7 @@ const Profile = ({ navigation }) => {
   const [user, setuser] = useState()
   const [posts, setpost] = useState()
   const [visible, setVisible] = useState(false);
+  const[load,setload]=useState(true)
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
@@ -68,7 +69,7 @@ const Profile = ({ navigation }) => {
           setpost(post)
           setdata(list);
           console.log(data)
-
+          setload(false)
 
         })
 
@@ -94,31 +95,41 @@ const Profile = ({ navigation }) => {
       <Text style={{ color: '#808080', marginTop: 5 }} onPress={onPress}>View less</Text>
     )
   }
+
   const toggleOverlay = (id) => {
     setid(id)
-
+    
     setVisible(!visible);
   };
   const Delete = () => {
     firestore().collection("Posts").doc(id).delete().then(function () {
-      console.log("Document successfully deleted!");
+      console.log("delete Post");
     })
-    firestore().collection("Apply").doc(id).delete().then(function () {
-      console.log("Document successfully deleted!");
+    
+      const jobskill_query =  firestore().collection("Apply").where("Post_id", "==", id);
+      jobskill_query.get().then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+  
+});
     })
+    AsyncStorage.setItem('badge', "")
     setVisible(!visible);
 
   }
+
+  
 
   return (
     <>
       <Header containerStyle={{ backgroundColor: 'white' }}
         leftComponent={<Dot name='plus' size={25} color='black' onPress={() => navigation.navigate('Upload')} />}
         centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{name}</Text>}
-        rightComponent={<Icon name="log-out" size={25} color="black" onPress={singout} />}
-      />
+        rightComponent={load?( <ActivityIndicator animating={load} size='large' color="#ff0000" />):
+        (<Icon name="log-out" size={25} color="black" onPress={singout} /> )
+         }
+          />
       <Divider />
-
 
 
       <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
@@ -182,36 +193,20 @@ const Profile = ({ navigation }) => {
                 </View>
                 <View style={{ position: 'absolute', alignSelf: 'flex-end',paddingEnd:10 }}>
                   <TouchableOpacity onPress={() => toggleOverlay(item.id)}>
-                  <Text style={{ marginTop: 15, fontSize: 12, }}>
-                    {item.Tournament_date}   <Dot style={{  }} name="dots-three-vertical" color='black' size={20} /></Text>
+                  <Text style={{ marginTop: 15, fontSize: 15, }}>
+                    {item.sports}   <Dot style={{  }} name="dots-three-vertical" color='black' size={20} /></Text>
                   </TouchableOpacity>
                 </View>
                 
 
-
-                <View style={{ paddingLeft: 10 }}>
-                  <ViewMoreText
-                    numberOfLines={1}
-                    renderViewMore={renderViewMore}
-                    renderViewLess={renderViewLess}
-                    textStyle={{ color: 'black', fontSize: 15 }}
-                  >
-                    <Text>
-                      First Price {item.one}₹ ,Second Price {item.two}₹ Third Price {item.three}₹...
-                  Entry Fees for {item.sports} Tournament {item.Tournament_Name} is {item.entry_fees}₹ . {" "}
-                      {item.description}
-                    </Text>
-                  </ViewMoreText>
-
-                </View>
                 <Divider />
 
 
                 <View style={{ margin: 5, }} >
-                  <Image source={{ uri: item.img_url }} style={{ width: "100%", height: 300 }} PlaceholderContent={<ActivityIndicator />} />
+                  <Image source={{ uri: item.img_url }} style={{marginTop:10, width: "100%", height: 400 }} PlaceholderContent={<ActivityIndicator />} />
                 </View>
                 <Text style={{ alignSelf: 'flex-end', fontSize: 12, paddingEnd: 10 }}>{item.CreatedAt}</Text>
-                <Divider />
+                <Divider style={{marginTop:10}} />
               </View>
 
             }

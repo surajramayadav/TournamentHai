@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Image, View } from 'react-native';
+import { Text, Image, View, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header, Input, Button, Divider, Avatar } from 'react-native-elements';
@@ -10,8 +10,11 @@ const UserRequest = () => {
   const [data, setdata] = useState()
   const route = useRoute();
   const state = useIsFocused();
+  
+  const[arr,setarr]=useState()
   console.log(state)
   useEffect(() => {
+    
     AsyncStorage.getItem("Uid").then((value) => {
       firestore().collection("Apply")
         .where("Org_id", "==", value)
@@ -26,12 +29,10 @@ const UserRequest = () => {
               id:doc.data().Post_id,
               CreatedAt:doc.data().CreatedAt.toDate().toDateString(),
             })
-
+            setarr(list.length)
             setdata(list)
             AsyncStorage.setItem("badge",JSON.stringify(list.length))
-            
-  
-
+          
           });
 
         })
@@ -50,8 +51,16 @@ const UserRequest = () => {
     <>
       <Header containerStyle={{ backgroundColor: 'white' }}
         centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}> Applied Users </Text>}
-      />
+        />
       <Divider/>
+         
+{
+  ! arr?(
+      
+    <View style={{  flex: 1, backgroundColor: 'white' , alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{fontSize:20}}>No Post Applied By User</Text>
+    </View>
+  ):(
       <View style={{ backgroundColor: 'white' }}>
         <FlatList
           data={data}
@@ -79,7 +88,7 @@ const UserRequest = () => {
         />
 
       </View>
-
+  )}
     </>
 
   );

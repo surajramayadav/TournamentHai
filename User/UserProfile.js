@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 const UserProfile = ({ route, navigation }) => {
 
   const { id } = route.params;
-
+  const[load,setload]=useState(false)
   const [uid, setuid] = useState()
   const [name, setname] = useState('')
   const [email, setemail] = useState('')
@@ -18,6 +18,7 @@ const UserProfile = ({ route, navigation }) => {
   const [posts, setpost] = useState()
 
   useLayoutEffect(() => {
+    setload(true)
     console.log("first")
 
 
@@ -60,6 +61,7 @@ const UserProfile = ({ route, navigation }) => {
         setpost(post)
         setdata(list);
         console.log(data)
+        setload(false)
 
       })
   }, [id])
@@ -82,7 +84,8 @@ const UserProfile = ({ route, navigation }) => {
       <Header containerStyle={{ backgroundColor: 'white' }}
         leftComponent={<Icon name='arrow-left' size={25} color='black' onPress={() => navigation.goBack()} />}
         centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{name}</Text>}
-
+        rightComponent={ <ActivityIndicator animating={load} size='large' color="#ff0000" />
+        }
       />
 <Divider/>
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }}
