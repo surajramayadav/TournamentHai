@@ -124,13 +124,13 @@ const Profile = ({ navigation }) => {
       <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
         <View style={{ height: windowHeight / 4, width: 250 }}>
           <Dot onPress={toggleOverlay} style={{ position: 'absolute', alignSelf: 'flex-end' }} name="cross" size={40} color='black' />
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 7 }}>
             <Text style={{ fontSize: 20, alignSelf: 'center', fontWeight: 'bold', }}>Options</Text>
           </View>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 15 }}>
             <Divider />
           </View>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 15 }}>
 
             <Button title="Edit Post" type="clear"  />
           </View>
@@ -138,7 +138,7 @@ const Profile = ({ navigation }) => {
 
             <Button title="Delete Post" type="clear" onPress={Delete} />
           </View>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 20 }}>
             <Divider />
 
           </View>

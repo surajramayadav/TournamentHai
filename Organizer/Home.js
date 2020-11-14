@@ -13,7 +13,7 @@ import Dot from 'react-native-vector-icons/Entypo';
 const Home = ({ navigation }) => {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-
+  const [arr, setarr] = useState([])
   const [Data, Setdata] = useState([])
   const [name, setname] = useState('')
   const [email, setemail] = useState('')
@@ -59,7 +59,6 @@ const Home = ({ navigation }) => {
               id: doc.id,
               Tournament_Name: doc.data().Tournament_Name,
               Tournament_date: doc.data().Tournament_date.toDate().toDateString(),
-              description: doc.data().description,
               entry_fees: doc.data().entry_fees,
               img_url: doc.data().img_url,
               phone_no: doc.data().phone_no,
@@ -70,10 +69,14 @@ const Home = ({ navigation }) => {
               mainid: doc.data().id,
               one: doc.data().price1,
               two: doc.data().price2,
-              three: doc.data().price3
+              three: doc.data().price3,
+            
             });
           });
+          const post = list.length
+          setarr(post)
           Setdata(list);
+          console.log(list)
 
         })
        
@@ -102,8 +105,15 @@ const Home = ({ navigation }) => {
       />
       <Divider />
    
-
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
+{
+  ! arr?(
+      
+    <View style={{  flex: 1, backgroundColor: 'white' , alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{fontSize:20}}>No Post Uploaded</Text>
+    </View>
+  ):(
+    
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
           <FlatList
             data={Data}
             renderItem={({ item }) =>
@@ -133,7 +143,7 @@ const Home = ({ navigation }) => {
                     <Text>
                       First Price {item.one}₹ ,Second Price {item.two}₹ Third Price {item.three}₹... 
                       Entry Fees for {item.sports} Tournament {item.Tournament_Name} is {item.entry_fees}₹ . {" "}
-                      {item.description}
+                      
                     </Text>
                   </ViewMoreText>
 
@@ -142,7 +152,8 @@ const Home = ({ navigation }) => {
 
 
                 <View style={{ margin: 5, }} >
-                  <Image source={{ uri: item.img_url }} style={{ width: 400, height: 300 }} PlaceholderContent={<ActivityIndicator />} />
+                  <Image source={{ uri: item.img_url }} style={{ width: 300, height: 300 }}
+                  resizeMode="contain" PlaceholderContent={<ActivityIndicator  size='large' color="#ff0000" />} />
                 </View>
   <Text style={{alignSelf:'flex-end',fontSize:10,paddingEnd:10}}>{item.CreatedAt}</Text>
                 
@@ -153,8 +164,7 @@ const Home = ({ navigation }) => {
           />
 
         </View>
-      
-
+  )}
     </>
 
 

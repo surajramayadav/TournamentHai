@@ -30,6 +30,7 @@
     "react-native-elements": "^2.3.2",
     "react-native-geocoding": "^0.4.0",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-image-crop-picker": "^0.34.0",
     "react-native-image-picker": "^2.3.4",
     "react-native-modal-datetime-picker": "^9.0.0",
     "react-native-permissions": "^2.2.2",

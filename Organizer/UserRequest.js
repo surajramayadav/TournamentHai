@@ -37,7 +37,7 @@ const UserRequest = () => {
         centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}> Applied Users </Text>}
       />
       <Divider/>
-      <View>
+      <View style={{ backgroundColor: 'white' }}>
         <FlatList
           data={data}
           renderItem={({ item }) =>
