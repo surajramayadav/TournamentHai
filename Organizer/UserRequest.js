@@ -5,8 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header, Input, Button, Divider, Avatar } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 import { FlatList } from 'react-native-gesture-handler';
+import { useIsFocused, useNavigationState, useRoute } from '@react-navigation/native';
 const UserRequest = () => {
   const [data, setdata] = useState()
+  const route = useRoute();
+  const state = useIsFocused();
+  console.log(state)
   useEffect(() => {
     AsyncStorage.getItem("Uid").then((value) => {
       firestore().collection("Apply")
@@ -22,7 +26,11 @@ const UserRequest = () => {
               id:doc.data().Post_id,
               CreatedAt:doc.data().CreatedAt.toDate().toDateString(),
             })
+
             setdata(list)
+            AsyncStorage.setItem("badge",JSON.stringify(list.length))
+            
+  
 
           });
 
@@ -30,6 +38,13 @@ const UserRequest = () => {
     })
 
   }, [])
+
+  useEffect(()=>{
+    if(state==true)
+            {
+              AsyncStorage.setItem('badge', "")
+            }
+  })
 
   return (
     <>

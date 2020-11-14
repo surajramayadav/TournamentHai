@@ -32,14 +32,18 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 function Organizer() {
   const[dp,setdp]=useState('../assets/default.jpg')
- 
+ const[bad,setbad]=useState()
   useEffect(()=>{
    
     AsyncStorage.getItem('Organizer').then((value) => {
       const data = JSON.parse(value)
       setdp(data.photoURL)
-     
     })
+       AsyncStorage.getItem('badge').then((value) => {
+      const data = JSON.parse(value)
+      setbad(value)
+    }) 
+    
    })
   return (
     <Tab.Navigator initialRouteName="Home"  tabBarOptions={{
@@ -65,10 +69,15 @@ function Organizer() {
     }} 
     />
     <Tab.Screen name="UserRequest" component={UserRequest} 
+
     options={{
+      
       tabBarIcon: ({ color, size }) => (
         <Icon name="heart" color={color} size={size} />
       ),
+     
+      tabBarBadge:!bad?(null):(bad)
+      
     }} 
     />
     <Tab.Screen name="Profile" component={Profile}

@@ -53,7 +53,7 @@ const Upload = () => {
 function Gallery(){
   ImagePicker.openPicker({
     width: 300,
-    height: 400,
+    height: 300,
     cropping: true
   }).then(image => {
     console.log(image);
@@ -306,7 +306,7 @@ function Gallery(){
             />
             <Text style={{
               fontSize: 12, paddingLeft: 15, color: 'red'
-            }}># Note :- Image should be containing tournament data (400x300) </Text>
+            }}># Note :- Image should be containing all tournament data (300x300) </Text>
 
           </View>
         </ScrollView>

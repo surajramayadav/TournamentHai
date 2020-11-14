@@ -112,7 +112,7 @@ const UserHome = ({ navigation }) => {
   const Tapply =()=>{
     firestore()
     .collection('Apply')
-    .doc(postid)
+    .doc(uuid)
     .set({
       name: naam,
       phoneNumber:no,

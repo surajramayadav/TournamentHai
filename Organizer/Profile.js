@@ -208,7 +208,7 @@ const Profile = ({ navigation }) => {
 
 
                 <View style={{ margin: 5, }} >
-                  <Image source={{ uri: item.img_url }} style={{ width: 400, height: 300 }} PlaceholderContent={<ActivityIndicator />} />
+                  <Image source={{ uri: item.img_url }} style={{ width: "100%", height: 300 }} PlaceholderContent={<ActivityIndicator />} />
                 </View>
                 <Text style={{ alignSelf: 'flex-end', fontSize: 12, paddingEnd: 10 }}>{item.CreatedAt}</Text>
                 <Divider />

@@ -17,9 +17,10 @@ const Home = ({ navigation }) => {
   const [Data, Setdata] = useState([])
   const [name, setname] = useState('')
   const [email, setemail] = useState('')
+  const[load,setload]=useState(true)
   const [dp, setdp] = useState('../assets/default.jpg')
   useEffect(() => {
-
+    setload(true)
     AsyncStorage.getItem('Organizer').then((value) => {
       const data = JSON.parse(value)
 
@@ -77,11 +78,12 @@ const Home = ({ navigation }) => {
           setarr(post)
           Setdata(list);
           console.log(list)
-
+          setload(false)
         })
        
   
     })
+    
 
   }, [])
 
@@ -96,13 +98,24 @@ const Home = ({ navigation }) => {
       <Text style={{ color: '#808080', marginTop: 5 }} onPress={onPress}>View less</Text>
     )
   }
+  const singout = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('Orgnizer signed out!'));
+    AsyncStorage.setItem('type', "")
+    navigation.replace('LoginType')
+
+  }
   return (
     <>
       <Header containerStyle={{ backgroundColor: 'white' }}
         leftComponent={<Dot name='camera' size={25} color='black' onPress={() => navigation.navigate('Upload')} />}
         centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{name}</Text>}
-        rightComponent={<Dot name='help' size={25} color='black' />}
-      />
+        
+        rightComponent={load?( <ActivityIndicator animating={load} size='large' color="#ff0000" />):
+        (<Icon name="log-out" size={25} color="black" onPress={singout} /> )
+         }
+        />
       <Divider />
    
 {
@@ -152,8 +165,8 @@ const Home = ({ navigation }) => {
 
 
                 <View style={{ margin: 5, }} >
-                  <Image source={{ uri: item.img_url }} style={{ width: 300, height: 300 }}
-                  resizeMode="contain" PlaceholderContent={<ActivityIndicator  size='large' color="#ff0000" />} />
+                  <Image source={{ uri: item.img_url }} style={{ width: "100%", height: 300 }}
+                   PlaceholderContent={<ActivityIndicator  size='large' color="#ff0000" />} />
                 </View>
   <Text style={{alignSelf:'flex-end',fontSize:10,paddingEnd:10}}>{item.CreatedAt}</Text>
                 
