@@ -26,12 +26,12 @@ const Spalsh=({navigation})=> {
     
   }, 3000);
   return (
-   <SafeAreaView style={{ backgroundColor:'white'}}>
-      <View style={{ flex: 1,marginTop:windowHeight/3, alignItems: 'center', justifyContent: 'center' }}>
+   <SafeAreaView style={{ flex:1,backgroundColor:'white'}}>
+      <View style={{marginTop:windowHeight/3, alignItems: 'center', justifyContent: 'center' }}>
         <Image source={require('../assets/trophy.png')} style={{width:'25%',height:100}}  />
         </View >
-         <View style={{ flex: 1, alignItems:'center',marginTop:windowHeight/3}}>
-        <Text style={{fontSize:30,color:'black',fontWeight:'bold'}}> Tournament </Text>
+         <View style={{ alignItems:'center',marginTop:windowHeight/3,backgroundColor:'white'}}>
+        <Text style={{backgroundColor:'white',fontSize:30,color:'black',fontWeight:'bold'}}> Tournament </Text>
         </View>
         </SafeAreaView>
   );

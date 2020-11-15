@@ -56,9 +56,9 @@ const LoginType = ({ navigation }) => {
      
       <Animatable.View style={{ flex: 1.6, backgroundColor: 'white' }} animation="tada" >
      
-       <Text style={{alignSelf:'center',fontSize:25,fontWeight:'bold'}}>Tournament Hai</Text>
+       <Text style={{alignSelf:'center',fontSize:25,fontWeight:'bold'}}>Tournament </Text>
        <Card>
-       <Text style={{marginTop:5,fontSize:20,alignSelf:'center'}}>Login As Player </Text>
+       <Text style={{marginTop:10,fontSize:20,alignSelf:'center'}}>Login As Player </Text>
        <Divider style={{marginTop:10}}/>
          <Button containerStyle={{marginTop:20}} icon={<Icon name='google' size={20} color='blue'/>} 
          onPress={UserLogin} title='   Singin With Google'  type='outline'/>
