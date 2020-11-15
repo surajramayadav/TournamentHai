@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {SafeAreaView,Text, StatusBar,} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused, useRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator, } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -24,13 +24,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import UserActivity from './User/UserActivity';
 
 
- 
-
-
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 function Organizer() {
+  
   const[dp,setdp]=useState('../assets/default.jpg')
  const[bad,setbad]=useState()
   useEffect(()=>{
@@ -55,7 +53,7 @@ function Organizer() {
    }}  >
     <Tab.Screen name="Home" component={Home} 
     options={{
-      
+    
       tabBarIcon: ({ color, size }) => (
         <Icon name="home" color={color} size={size} />
       ),

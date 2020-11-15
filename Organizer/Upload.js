@@ -9,17 +9,19 @@ import AsyncStorage from '@react-native-community/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import En from 'react-native-vector-icons/Entypo';
+import Mat from 'react-native-vector-icons/MaterialIcons';
+
 import { Header, Input, Button, Overlay, Divider, Avatar, Accessory } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Upload = () => {
-  
+
   const [load, setload] = useState(false)
 
   const [uname, setuname] = useState('')
   const [uemail, setuemail] = useState('')
   const [udp, setudp] = useState('../assets/default.jpg')
-  
+
   const [img, setimag] = useState('../assets/default.jpg')
   const [imgurl, setimgurl] = useState()
   const [sports, setsports] = useState()
@@ -50,19 +52,21 @@ const Upload = () => {
   }, [])
 
 
-function Gallery(){
-  ImagePicker.openPicker({
-    width: 300,
-    height: 300,
-    cropping: true
-  }).then(image => {
-    console.log(image);
-    setimag(image);
-  });
-}
+  function Gallery() {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+      setimag(image);
+    });
+  }
 
   const Post = async () => {
+
     setload(true)
+
     const postid = await AsyncStorage.getItem('Uid')
     const { path } = img;
     const filename = path.substring(path.lastIndexOf('/') + 1);
@@ -158,7 +162,7 @@ function Gallery(){
 
         <View style={{ height: windowHeight / 1.6, width: windowWidth / 1.3 }}>
           <ScrollView
-          showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}>
             <En onPress={toggleOverlay} style={{ position: 'absolute', alignSelf: 'flex-end' }} name="cross" size={40} color='black' />
             <View style={{}}>
               <Text style={{ fontSize: 25, alignSelf: 'center', fontWeight: 'bold', }}>Description</Text>
@@ -167,22 +171,38 @@ function Gallery(){
               <Input placeholder='No of Teams'
 
                 value={team}
+                keyboardType='numeric'
+                maxLength={2}
+                rightIcon={!team ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+
                 onChangeText={(t) => setteam(t)}
               />
               <Input placeholder='1st Price'
                 value={one}
+                maxLength={6}
+                keyboardType='numeric'
+                rightIcon={!one ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+
                 onChangeText={(t) => setone(t)}
               />
               <Input placeholder='2nd price'
                 value={two}
+                maxLength={6}
+                keyboardType='numeric'
                 onChangeText={(t) => settwo(t)}
               />
               <Input placeholder='3rd price'
                 value={three}
+                maxLength={6}
+                keyboardType='numeric'
                 onChangeText={(t) => setthree(t)}
               />
               <Input placeholder='Contact No '
                 value={no}
+                keyboardType='numeric'
+                maxLength={10}
+                rightIcon={!no ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+
                 onChangeText={(t) => setno(t)}
               />
 
@@ -210,6 +230,8 @@ function Gallery(){
             <Input
               placeholder='Tournament Name'
               value={name}
+              maxLength={30}
+              rightIcon={!name ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
               onChangeText={(t) => setname(t)}
             />
 
@@ -220,6 +242,8 @@ function Gallery(){
             <Input
               placeholder='Location'
               value={location}
+              rightIcon={!location ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+              maxLength={30}
               onChangeText={(t) => setlocation(t)}
             />
           </View>
@@ -230,6 +254,10 @@ function Gallery(){
               <Input
                 placeholder='Entry Fees'
                 value={fees}
+                keyboardType='numeric'
+                maxLength={6}
+                rightIcon={!fees ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+
                 onChangeText={(t) => setfees(t)}
               />
             </View>
@@ -237,6 +265,8 @@ function Gallery(){
               <Input
                 placeholder='Sports Name'
                 value={sports}
+                rightIcon={!sports ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+                maxLength={10}
                 onChangeText={(text) => setsports(text)}
               />
             </View>
@@ -250,6 +280,8 @@ function Gallery(){
               <Input
                 disabled={true}
                 placeholder='Date'
+                rightIcon={!date ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+
                 value={date ? (date.toDateString()) : (date)}
 
               />
@@ -264,7 +296,7 @@ function Gallery(){
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
-                minimumDate = {new Date()}
+                minimumDate={new Date()}
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
               />
@@ -304,10 +336,7 @@ function Gallery(){
               disabled={load}
               onPress={Post}
             />
-            <Text style={{
-              fontSize: 12, paddingLeft: 15, color: 'red'
-            }}># Note :- Image should be containing all tournament data (300x300) </Text>
-
+            
           </View>
         </ScrollView>
 

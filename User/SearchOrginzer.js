@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Text, View, } from 'react-native';
+import { ActivityIndicator, Text, View, } from 'react-native';
 import { Card, Header, Avatar, Divider, Tooltip, Button, Badge, SearchBar, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
@@ -11,7 +11,9 @@ const SearchOrginzer = ({ navigation }) => {
   const [search, setsearch] = useState()
   const [text,settext]=useState()
   const [arr,setarr]=useState([])
+  const[load,setload]=useState(false)
   useEffect(() => {
+    setload(true)
     firestore().collection("Organizer")
       .onSnapshot(function (snapshot) {
         const list = [];
@@ -28,8 +30,7 @@ const SearchOrginzer = ({ navigation }) => {
         setsearch(list);
         setarr(list)
        console.log(search)
-
-
+       setload(false)
       })
 
 
@@ -56,7 +57,8 @@ const searchData=(text) =>{
       <Header containerStyle={{backgroundColor:'white'}}
         leftComponent={<Icon name='arrow-left' size={25} color='black' onPress={() => navigation.goBack()} />}
         centerComponent={<Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}> Search Orgnizer </Text>}
-
+        rightComponent={ <ActivityIndicator animating={load} size='large' color="#ff0000" />
+  }
       />
       <Divider/>
       <SearchBar containerStyle={{ backgroundColor: 'white', borderBottomColor: 'white', borderTopColor: 'white' }} inputContainerStyle={{ backgroundColor: 'white' }}

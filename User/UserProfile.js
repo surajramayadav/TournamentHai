@@ -110,46 +110,34 @@ const UserProfile = ({ route, navigation }) => {
             renderItem={({ item }) =>
             <View>
 
-            <View style={{ padding: 10 }}>
-              <Avatar size='small' activeOpacity={0.7} rounded source={{ uri: dp }} />
-            </View>
-            <View style={{ position: 'absolute', }}>
-              <Text style={{ fontSize: 15, marginTop: 10, paddingLeft: 55, fontWeight: 'bold' }}>{name}</Text>
-              <Text style={{ fontSize: 13, paddingLeft: 55, }}>{item.Location}</Text>
-            </View>
-            <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
-              <Text style={{ marginTop: 12, paddingEnd: 10, fontSize: 15 }}>
-                {item.Tournament_date}</Text>
-            </View>
-          
-
-            <View style={{ paddingLeft: 10 }}>
-              <ViewMoreText
-                numberOfLines={1}
-                renderViewMore={renderViewMore}
-                renderViewLess={renderViewLess}
-                textStyle={{ color: 'black', fontSize: 15 }}
-              >
-                <Text>
-                  First Price {item.one}₹ ,Second Price {item.two}₹ Third Price {item.three}₹... 
-                  Entry Fees for {item.sports} Tournament {item.Tournament_Name} is {item.entry_fees}₹ . {" "}
-                  {item.description}
-                </Text>
-              </ViewMoreText>
-
-            </View>
-            <Divider />
+<View style={{ padding: 7 }}>
+                  <Avatar size={50} activeOpacity={0.7} rounded source={{ uri: dp }} />
+                </View>
+                <View style={{ position: 'absolute', }}>
+                  <Text style={{ fontSize: 15, marginTop: 10, paddingLeft: 70, fontWeight: 'bold' }}>{name}
+                  </Text>
+                  <Text style={{ fontSize: 13, paddingLeft: 70, }}>{item.Location}</Text>
+                </View>
+                <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
+                  <Text style={{ marginTop: 5, paddingEnd: 10, fontSize: 15 }}>
+                  ₹ {item.one}</Text>
+                </View>
+                <View style={{ position: 'absolute', alignSelf: 'flex-end' }}>
+                  <Text style={{ marginTop: 30, paddingEnd:10, fontSize: 15,}}>
+                    {item.sports}</Text>
+                </View>
+       
 
 
             
 
 
                 <View style={{ margin:5 }} >
-                  <Image source={{ uri: item.img_url }} style={{  width: "100%", height:300 }} PlaceholderContent={<ActivityIndicator />} />
+                  <Image source={{ uri: item.img_url }} style={{ marginTop:10, width: "100%", height:300 }} PlaceholderContent={<ActivityIndicator />} />
                 </View>
                 <Text style={{alignSelf:'flex-end',fontSize:12,paddingEnd:10}}>{item.CreatedAt}</Text>
   
-                <Divider />
+                <Divider style={{marginTop:10}} />
 
               </View>
 

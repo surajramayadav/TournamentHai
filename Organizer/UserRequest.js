@@ -41,7 +41,7 @@ const UserRequest = () => {
   }, [])
 
   useEffect(()=>{
-    if(state==true)
+    if(state==true && route.name=='UserRequest')
             {
               AsyncStorage.setItem('badge', "")
             }
