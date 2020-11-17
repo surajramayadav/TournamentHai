@@ -7,10 +7,12 @@ import Dot from 'react-native-vector-icons/Entypo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Header, Avatar, Divider, Tooltip,Button, Badge, SearchBar, Overlay, Input } from 'react-native-elements';
 import { FlatList,  } from 'react-native-gesture-handler';
-
+import Mat from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Feather';
 import En from 'react-native-vector-icons/Entypo';
 const UserHome = ({ navigation }) => {
+  const [val,setval]=useState(false)
+  const [len,setlen]=useState('')
   const [orgid,setorgid]=useState()
   const [text,settext]=useState()
   const [arr,setarr]=useState([])
@@ -79,7 +81,7 @@ const UserHome = ({ navigation }) => {
         setdata(list);
         setarr(list)
         setload(false)
-        console.log(list)
+        
 
       })
 
@@ -98,32 +100,73 @@ const UserHome = ({ navigation }) => {
  
 
   const toggleOverlay = (mainid,id,tname,sports) => {  
-    setorgid(mainid)
+setorgid(mainid)
+
     setpostid(id)  
     settname(tname)
     setsports(sports)
+
+
     setVisible(!visible);
 
 
   };
   const Tapply =()=>{
-    firestore()
-    .collection('Apply')
-    .doc(postid)
-    .set({
-      name: naam,
-      phoneNumber:no,
-      dp: img,
-      Org_id:orgid,
-      Post_id:postid,
-      User_id:uuid,
-      Tournament_Name:tname,
-      sports:sports,
-      CreatedAt:new Date()
+    
+    firestore().collection("Apply")
+    .where("Post_id", "==", postid)
+    .onSnapshot(function (snapshot) {
+      const list = []
+      snapshot.forEach(doc => {
+        list.push({
+          name: doc.data().name,
+        });
+      })
+      setlen(list.length)
+      console.log(len)
     })
-    .then(() => {
-      alert("Apply Successfully !!!")
-    });
+
+    
+
+  
+      if(uuid==orgid)
+      {
+        alert("This is Your Tournament")
+      }
+      else{
+        if(len==0)
+
+        {
+          firestore()
+          .collection('Apply')
+          .add({
+            name: naam,
+            phoneNumber:no,
+            dp: img,
+            Org_id:orgid,
+            Post_id:postid,
+            User_id:uuid,
+            Tournament_Name:tname,
+            sports:sports,
+            CreatedAt:new Date()
+          })
+          .then(() => {
+            alert("Apply Successfully !!!")
+          });
+          
+  }
+  else{
+    alert("Already applied")
+     
+   
+   
+  }
+      }
+
+   
+
+
+
     
     setVisible(!visible);
 
@@ -145,6 +188,8 @@ const UserHome = ({ navigation }) => {
     />
     <Divider/>
      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+       
+       
         <View style={{height:windowHeight/3,width:250}}>
           <En onPress={toggleOverlay} style={{position:'absolute',alignSelf:'flex-end'}} name="cross" size={40} color='black'/> 
           <View style={{marginTop:10}}>
@@ -154,19 +199,27 @@ const UserHome = ({ navigation }) => {
           <Input  placeholder='Phone Number'
           value={no}
           onChangeText={(text)=>setno(text)}
+          maxLength={10}
+          keyboardType='numeric'
         leftIcon={<Icon name="phone" size={20} color='black'/>}
+        rightIcon={!no ? (<Mat name='error' color='red' size={20} />) : (<Mat name='check-circle-outline' color='green' size={20} />)}
+
         />
         <View>
-        <Button title="Apply" type="outline"
+        <Button title="Apply" type="solid"
+        
         onPress={()=>Tapply()}/>
         </View>
         <View style={{marginTop:20}}>
-          <Text style={{fontSize:15,alignSelf:'center',fontWeight:'bold',}}>Orgnizer will contact You Soon !!!</Text>
-        </View>
+         
+           <Text style={{fontSize:15,alignSelf:'center',fontWeight:'bold',}}>Orgnizer will contact You Soon !!!</Text>
+          
+          </View>
           </View>
        
 
         </View>
+        
       </Overlay>
       
       <SearchBar containerStyle={{ backgroundColor: 'white', borderBottomColor: 'white', borderTopColor: 'white' }} inputContainerStyle={{ backgroundColor: 'white' }}
