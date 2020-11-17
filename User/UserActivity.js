@@ -22,8 +22,9 @@ const UserActivity = ({ navigation }) => {
                             no: doc.data().phoneNumber,
                             dp: doc.data().dp,
                             Tournament_Name: doc.data().Tournament_Name,
-                            id: doc.data().Post_id,
+                            id: doc.data().User_id,
                             sports: doc.data().sports,
+
                             CreatedAt: doc.data().CreatedAt.toDate().toDateString(),
                         })
                         setdata(list)
@@ -33,14 +34,21 @@ const UserActivity = ({ navigation }) => {
 
                 })
         })
-        
+
 
     }, [])
 
     const apply = (id) => {
-        firestore().collection("Apply").doc(id).delete().then(function () {
-            alert("Cancel Sucessfully")
-          })
+
+        const jobskill_query = firestore().collection("Apply").where("User_id", "==", id);
+        jobskill_query.get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                doc.ref.delete();
+
+            });
+        })
+        alert("Cancel Successfully !!!")
+
     }
     return (
         < >
